@@ -1,6 +1,6 @@
 # 🛡️ Sistem_IDS: Sistema de Detecção de Intrusões Automotivas
 
-Projeto acadêmico desenvolvido para o curso de Ciência da Computação do CEUB, focando na segurança cibernética de redes veiculares (barramento CAN) e na aplicação de práticas de DevOps (Avaliação A1).
+Projeto acadêmico desenvolvido para o curso de Ciência da Computação do CEUB, focando na segurança cibernética de redes veiculares (barramento CAN).
 
 ## 📌 Sobre o Projeto
 O Sistem_IDS é uma prova de conceito que simula a comunicação interna de um veículo e monitora a rede em tempo real para detectar anomalias. O foco atual do motor de detecção é a identificação de ataques de **Negativa de Serviço (DoS - Denial of Service)**, interceptando picos volumétricos de pacotes injetados na rede.
