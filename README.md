@@ -1,6 +1,6 @@
 # 🛡️ Sistem_IDS: Sistema de Detecção de Intrusões Automotivas
 
-Projeto acadêmico desenvolvido para o curso de Ciência da Computação do CEUB, focando na segurança cibernética de redes veiculares (barramento CAN).
+Projeto acadêmico desenvolvido para o curso de Ciência da Computação do CEUB, focando na segurança cibernética de redes veiculares (barramento CAN) e na aplicação de práticas de DevOps (Avaliação A1).
 
 ## 📌 Sobre o Projeto
 O Sistem_IDS é uma prova de conceito que simula a comunicação interna de um veículo e monitora a rede em tempo real para detectar anomalias. O foco atual do motor de detecção é a identificação de ataques de **Negativa de Serviço (DoS - Denial of Service)**, interceptando picos volumétricos de pacotes injetados na rede.
@@ -21,12 +21,10 @@ Navegue até a pasta `ids-engine`, compile e execute o código Java:
 javac MotorIDS.java
 java MotorIDS
 
-**2. Iniciar o Tráfego do Veículo (O Carro)**
+2. Iniciar o Tráfego do Veículo (O Carro)
 Em um novo terminal, inicie o tráfego limpo (1 pacote/segundo):
-```bash
 python trafic-sim/traffic-sim.py
 
-**3. Injetar o Ataque DoS (O Hacker)**
+3. Injetar o Ataque DoS (O Hacker)
 Em um terceiro terminal, dispare o script malicioso para sobrecarregar a rede virtual:
-```bash
 python trafic-sim/ataque-dos.py
