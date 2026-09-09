@@ -20,3 +20,13 @@ Navegue até a pasta `ids-engine`, compile e execute o código Java:
 ```bash
 javac MotorIDS.java
 java MotorIDS
+
+**2. Iniciar o Tráfego do Veículo (O Carro)**
+Em um novo terminal, inicie o tráfego limpo (1 pacote/segundo):
+```bash
+python trafic-sim/traffic-sim.py
+
+**3. Injetar o Ataque DoS (O Hacker)**
+Em um terceiro terminal, dispare o script malicioso para sobrecarregar a rede virtual:
+```bash
+python trafic-sim/ataque-dos.py
