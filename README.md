@@ -29,3 +29,5 @@ python trafic-sim/traffic-sim.py
 3. Injetar o Ataque DoS (O Hacker)
 Em um terceiro terminal, dispare o script malicioso para sobrecarregar a rede virtual:
 python trafic-sim/ataque-dos.py
+
+## ⚙️ Pipeline CI/CD configurada com GitHub Actions e Maven
