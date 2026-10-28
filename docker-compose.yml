@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  motor-ids:
+    build: ./motor-java
+    container_name: sistem_ids_motor
+    networks:
+      - rede-can
+
+  simulador-can:
+    build: ./trafic-sim
+    container_name: sistem_ids_simulador
+    depends_on:
+      - motor-ids
+    networks:
+      - rede-can
+
+networks:
+  rede-can:
+    driver: bridge
