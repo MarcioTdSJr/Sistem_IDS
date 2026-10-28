@@ -10,12 +10,14 @@ public class PacoteCAN {
         this.dados = dados;
         this.timestamp = timestamp;
     }
-
     public String getIdentificador() {
         return this.idCan;
     }
 
     public long getTimestamp() {
         return this.timestamp;
+    }
+    public String getDados() {
+        return this.dados;
     }
 }
