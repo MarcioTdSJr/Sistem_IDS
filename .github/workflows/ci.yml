@@ -1,16 +1,15 @@
-name: Pipeline CI - Sistem_IDS
+name: Pipeline CI/CD - Sistem_IDS
 
 on:
   push:
-    branches: [ "main", "develop" ]
+    branches: [ "main", "feat/documentacao-ci", "feat/*" ]
   pull_request:
-    branches: [ "main", "develop" ]
+    branches: [ "main", "feat/documentacao-ci", "feat/*" ]
 
 jobs:
   build-and-test-java:
-    name: Build e Testes Unitários (Java 17)
+    name: 1. Build e Testes Unitários (Java 17)
     runs-on: ubuntu-latest
-
     steps:
       - name: Baixar o código do repositório
         uses: actions/checkout@v4
@@ -27,9 +26,8 @@ jobs:
         run: mvn clean test
 
   lint-python-simulator:
-    name: Validar Simulador CAN (Python 3)
+    name: 2. Validar Simulador CAN (Python 3)
     runs-on: ubuntu-latest
-
     steps:
       - name: Baixar o código do repositório
         uses: actions/checkout@v4
@@ -41,3 +39,20 @@ jobs:
 
       - name: Verificar erros de sintaxe nos scripts Python
         run: python -m py_compile trafic-sim/ataque-dos.py trafic-sim/traffic-sim.py
+
+  docker-build-validator:
+    name: 3. CD - Gerar e Validar Imagens Docker
+    needs: [build-and-test-java, lint-python-simulator]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar o código do repositório
+        uses: actions/checkout@v4
+
+      - name: Gerar Imagem Docker Otimizada (Motor Java)
+        run: docker build -t sistem-ids-motor:latest ./motor-java
+
+      - name: Gerar Imagem Docker (Simulador Python)
+        run: docker build -t sistem-ids-simulador:latest ./trafic-sim
+
+      - name: Listar Imagens Geradas com Sucesso
+        run: docker images | grep sistem-ids
