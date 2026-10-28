@@ -1,4 +1,5 @@
 # 🛡️ Sistem_IDS: Sistema de Detecção de Intrusões Automotivas
+[![Pipeline CI - Sistem_IDS](https://github.com/MarcioTdSJr/Sistem_IDS/actions/workflows/ci.yml/badge.svg)](https://github.com/MarcioTdSJr/Sistem_IDS/actions/workflows/ci.yml)
 
 Projeto acadêmico desenvolvido para o curso de Ciência da Computação do CEUB, focando na segurança cibernética de redes veiculares (barramento CAN) e na aplicação de práticas de DevOps (Avaliação A1).
 
