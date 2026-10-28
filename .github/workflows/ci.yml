@@ -1,27 +1,43 @@
-name: Pipeline CI - A1 DevOps
+name: Pipeline CI - Sistem_IDS
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "develop" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "develop" ]
 
 jobs:
-  build-and-test:
-    runs-on: windows-latest
-    
-    steps:
-      - name: Fazer o checkout do código
-        uses: actions/checkout@v3
+  build-and-test-java:
+    name: Build e Testes Unitários (Java 17)
+    runs-on: ubuntu-latest
 
-      - name: Configurar o Java (JDK 17)
-        uses: actions/setup-java@v3
+    steps:
+      - name: Baixar o código do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar o Java 17
+        uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: maven
 
-      - name: Compilar e Executar Testes Automatizados
-        run: |
-          cd ids-engine
-          javac TesteIDS.java
-          java TesteIDS
+      - name: Compilar e Executar Testes JUnit (Maven)
+        working-directory: ./motor-java
+        run: mvn clean test
+
+  lint-python-simulator:
+    name: Validar Simulador CAN (Python 3)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar o código do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar o Python 3
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Verificar erros de sintaxe nos scripts Python
+        run: python -m py_compile trafic-sim/ataque-dos.py trafic-sim/traffic-sim.py
