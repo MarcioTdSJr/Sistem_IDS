@@ -12,24 +12,6 @@ O sistema foi desenhado com uma arquitetura distribuída e executado em ambiente
 *   **Python 3 (Simulador):** Utiliza a biblioteca `python-can` para gerar frames de telemetria automotiva e simular o tráfego limpo.
 *   **DevOps & CI/CD:** Repositório estruturado no padrão Trunk-Based (branch `main`). Utiliza **GitHub Actions** para compilação automatizada e execução de testes unitários a cada novo commit.
 
-## 🚀 Como Executar a Simulação Local
-
-Para ver o sistema de defesa em ação, é necessário executar os três componentes simultaneamente em terminais separados:
-
-**1. Iniciar o Motor de Detecção (O Guarda)**
-Navegue até a pasta `ids-engine`, compile e execute o código Java:
-```bash
-javac MotorIDS.java
-java MotorIDS
-
-2. Iniciar o Tráfego do Veículo (O Carro)
-Em um novo terminal, inicie o tráfego limpo (1 pacote/segundo):
-python trafic-sim/traffic-sim.py
-
-3. Injetar o Ataque DoS (O Hacker)
-Em um terceiro terminal, dispare o script malicioso para sobrecarregar a rede virtual:
-python trafic-sim/ataque-dos.py
-
 ## ⚙️ Pipeline CI/CD configurada com GitHub Actions e Maven
 
 ## 🚀 Estratégia de CI/CD, Versionamento e Rollback
@@ -51,4 +33,23 @@ Em caso de falha crítica ou falso-positivo detectado em ambiente de produção 
    ```yaml
    services:
      motor-ids:
-       image: ghcr.io/usuario/sistem-ids/motor-ids:v1.0.0
+       image: ghcr.io/usuario/sistem-ids/motor-ids:v1.0.6
+
+## 🚀 Como Executar a Simulação Local
+
+Para ver o sistema de defesa em ação, é necessário executar os três componentes simultaneamente em terminais separados:
+
+**1. Iniciar o Motor de Detecção (O Guarda)**
+Navegue até a pasta `ids-engine`, compile e execute o código Java:
+```bash
+javac MotorIDS.java
+java MotorIDS
+
+2. Iniciar o Tráfego do Veículo (O Carro)
+Em um novo terminal, inicie o tráfego limpo (1 pacote/segundo):
+python trafic-sim/traffic-sim.py
+
+3. Injetar o Ataque DoS (O Hacker)
+Em um terceiro terminal, dispare o script malicioso para sobrecarregar a rede virtual:
+python trafic-sim/ataque-dos.py
+
