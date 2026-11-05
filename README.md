@@ -13,6 +13,9 @@ O sistema foi desenhado com uma arquitetura distribuída e executado em ambiente
 *   **DevOps & CI/CD:** Repositório estruturado no padrão Trunk-Based (branch `main`). Utiliza **GitHub Actions** para compilação automatizada e execução de testes unitários a cada novo commit.
 
 ## ⚙️ Pipeline CI/CD configurada com GitHub Actions e Maven
+A automação do repositório (`.github/workflows/ci.yml`) é disparada a cada *push* ou *pull request* na branch `main` e executa as seguintes etapas:
+* **Integração Contínua (CI):** Compilação do motor Java com Apache Maven, execução de testes unitários automatizados com JUnit 5 e validação de sintaxe dos scripts Python.
+* **Entrega Contínua (CD):** Build das imagens Docker (`Dockerfile` e `docker-compose.yml`), aplicação de tags de versão e publicação automatizada no registro de containers.
 
 ## 🚀 Estratégia de CI/CD, Versionamento e Rollback
 
@@ -33,7 +36,7 @@ Em caso de falha crítica ou falso-positivo detectado em ambiente de produção 
    ```yaml
    services:
      motor-ids:
-       image: ghcr.io/usuario/sistem-ids/motor-ids:v1.0.6
+       image: ghcr.io/usuario/sistem-ids/motor-ids:v1.0.0```
 
 ## 🚀 Como Executar a Simulação Local
 
