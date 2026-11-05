@@ -31,3 +31,24 @@ Em um terceiro terminal, dispare o script malicioso para sobrecarregar a rede vi
 python trafic-sim/ataque-dos.py
 
 ## ⚙️ Pipeline CI/CD configurada com GitHub Actions e Maven
+
+## 🚀 Estratégia de CI/CD, Versionamento e Rollback
+
+### 🔐 Gestão Segura de Configurações e Segredos
+A esteira de CI/CD utiliza o mecanismo nativo de gestão de segredos do GitHub Actions (`secrets.GITHUB_TOKEN`), garantindo que nenhuma senha ou chave de API fique exposta em texto plano no código-fonte.
+
+### 🏷️ Versionamento Semântico (SemVer)
+As imagens Docker do projeto seguem o padrão de versionamento semântico `MAJOR.MINOR.PATCH` (ex: `v1.0.0`):
+- **MAJOR**: Alterações incompatíveis na arquitetura da rede CAN.
+- **MINOR**: Novas regras de detecção de anomalias no motor Java.
+- **PATCH**: Correções de bugs e refatorações leves.
+
+### 🔄 Procedimento Documentado de Rollback
+Em caso de falha crítica ou falso-positivo detectado em ambiente de produção após o deploy de uma nova versão:
+
+1. **Identificação da Versão Estável:** Identifique a última tag válida do container (ex: `v1.0.0`).
+2. **Reversão de Imagem no Docker Compose:** Altere a tag no arquivo `docker-compose.yml` para a versão anterior:
+   ```yaml
+   services:
+     motor-ids:
+       image: ghcr.io/usuario/sistem-ids/motor-ids:v1.0.0
