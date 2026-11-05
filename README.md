@@ -37,7 +37,7 @@ Em caso de falha crítica ou falso-positivo detectado em ambiente de produção 
 services:
   motor-ids:
     image: ghcr.io/marciotdsjr/sistem_ids:v1.0.0
-
+```
 ## 🚀 Como Executar a Simulação Local
 
 Para ver o sistema de defesa em ação, é necessário executar os três componentes simultaneamente em terminais separados:
