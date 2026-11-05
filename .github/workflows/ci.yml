@@ -2,13 +2,20 @@ name: Pipeline CI/CD - Sistem_IDS
 
 on:
   push:
-    branches: [ "main", "feat/documentacao-ci", "feat/*" ]
+    branches: [ "main", "feat/*" ]
+    tags: [ 'v*.*.*' ] # Dispara o CD completo ao criar tags de versão (ex: v1.0.0)
   pull_request:
-    branches: [ "main", "feat/documentacao-ci", "feat/*" ]
+    branches: [ "main" ]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_JAVA: ghcr.io/${{ github.repository }}/motor-ids
+  IMAGE_PYTHON: ghcr.io/${{ github.repository }}/simulador-can
 
 jobs:
+  # --- FASE 1: CI (Integração Contínua) ---
   build-and-test-java:
-    name: 1. Build e Testes Unitários (Java 17)
+    name: 1. CI - Build e Testes Unitários (Java 17)
     runs-on: ubuntu-latest
     steps:
       - name: Baixar o código do repositório
@@ -23,36 +30,68 @@ jobs:
 
       - name: Compilar e Executar Testes JUnit (Maven)
         working-directory: ./motor-java
-        run: mvn clean test
+        run: mvn clean test[cite: 17]
 
   lint-python-simulator:
-    name: 2. Validar Simulador CAN (Python 3)
+    name: 2. CI - Validar Sintaxe (Python 3)
     runs-on: ubuntu-latest
     steps:
       - name: Baixar o código do repositório
         uses: actions/checkout@v4
 
-      - name: Configurar o Python 3
+      - name: Configurar o Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
       - name: Verificar erros de sintaxe nos scripts Python
-        run: python -m py_compile trafic-sim/ataque-dos.py trafic-sim/traffic-sim.py
+        run: python -m py_compile trafic-sim/ataque-dos.py trafic-sim/traffic-sim.py[cite: 7, 9]
 
-  docker-build-validator:
-    name: 3. CD - Gerar e Validar Imagens Docker
+  # --- FASE 2: CD (Entrega e Publicação Contínua) ---
+  docker-publish-and-deploy:
+    name: 3. CD - Build, Tag e Push para Container Registry
     needs: [build-and-test-java, lint-python-simulator]
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write # Permissão segura para publicar no GitHub Packages
+
     steps:
       - name: Baixar o código do repositório
         uses: actions/checkout@v4
 
-      - name: Gerar Imagem Docker Otimizada (Motor Java)
-        run: docker build -t sistem-ids-motor:latest ./motor-java
+      - name: Autenticar no GitHub Container Registry (Gestão Segura de Segredos)
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }} # Secret nativo e seguro
 
-      - name: Gerar Imagem Docker (Simulador Python)
-        run: docker build -t sistem-ids-simulador:latest ./trafic-sim
+      - name: Extrair metadados e Tags (Versionamento Semântico)
+        id: meta-java
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_JAVA }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=raw,value=latest
 
-      - name: Listar Imagens Geradas com Sucesso
-        run: docker images | grep sistem-ids
+      - name: Gerar e Publicar Imagem Docker (Motor Java Multi-Stage)
+        uses: docker/build-push-action@v5
+        with:
+          context: ./motor-java
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta-java.outputs.tags }}
+
+      - name: Gerar e Publicar Imagem Docker (Simulador Python)
+        uses: docker/build-push-action@v5
+        with:
+          context: ./trafic-sim
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ env.IMAGE_PYTHON }}:latest
+
+      - name: Simulação de Deploy em Homologação
+        run: |
+          echo "🚀 Simulação de Deploy em Homologação/Produção"
+          echo "Baixando imagens atualizadas: ${{ env.IMAGE_JAVA }}:latest"
+          echo "STATUS: Deploy realizado com sucesso!"
