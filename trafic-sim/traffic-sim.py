@@ -1,3 +1,4 @@
+# Antes de rodar use no terminal (pip install python-can) para baixar a biblioteca can
 import can
 import time
 import socket # Adicionamos a biblioteca de rede
