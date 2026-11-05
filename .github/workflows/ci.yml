@@ -3,7 +3,7 @@ name: Pipeline CI/CD - Sistem_IDS
 on:
   push:
     branches: [ "main", "feat/*" ]
-    tags: [ 'v*.*.*' ] # Dispara o CD completo ao criar tags de versão (ex: v1.0.0)
+    tags: [ 'v*.*.*' ]
   pull_request:
     branches: [ "main" ]
 
@@ -30,7 +30,7 @@ jobs:
 
       - name: Compilar e Executar Testes JUnit (Maven)
         working-directory: ./motor-java
-        run: mvn clean test[cite: 17]
+        run: mvn clean test
 
   lint-python-simulator:
     name: 2. CI - Validar Sintaxe (Python 3)
@@ -45,7 +45,7 @@ jobs:
           python-version: '3.11'
 
       - name: Verificar erros de sintaxe nos scripts Python
-        run: python -m py_compile trafic-sim/ataque-dos.py trafic-sim/traffic-sim.py[cite: 7, 9]
+        run: python -m py_compile trafic-sim/ataque-dos.py trafic-sim/traffic-sim.py
 
   # --- FASE 2: CD (Entrega e Publicação Contínua) ---
   docker-publish-and-deploy:
@@ -54,18 +54,18 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write # Permissão segura para publicar no GitHub Packages
+      packages: write
 
     steps:
       - name: Baixar o código do repositório
         uses: actions/checkout@v4
 
-      - name: Autenticar no GitHub Container Registry (Gestão Segura de Segredos)
+      - name: Autenticar no GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }} # Secret nativo e seguro
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Extrair metadados e Tags (Versionamento Semântico)
         id: meta-java
@@ -93,5 +93,4 @@ jobs:
       - name: Simulação de Deploy em Homologação
         run: |
           echo "🚀 Simulação de Deploy em Homologação/Produção"
-          echo "Baixando imagens atualizadas: ${{ env.IMAGE_JAVA }}:latest"
           echo "STATUS: Deploy realizado com sucesso!"
