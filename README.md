@@ -38,21 +38,22 @@ services:
   motor-ids:
     image: ghcr.io/marciotdsjr/sistem_ids:v1.0.0
 ```
-## 🚀 Como Executar a Simulação Local
+## 🐳 Como Executar o Ambiente (Docker)
 
-Para ver o sistema de defesa em ação, é necessário executar os três componentes simultaneamente em terminais separados:
+Com o projeto containerizado, não é necessário instalar o Java ou o Python manualmente na máquina. Toda a arquitetura (Motor IDS e Simulador de Tráfego) é orquestrada via **Docker Compose**:
 
-**1. Iniciar o Motor de Detecção (O Guarda)**
-Navegue até a pasta `ids-engine`, compile e execute o código Java:
-```bash
-javac MotorIDS.java
-java MotorIDS
-
-2. Iniciar o Tráfego do Veículo (O Carro)
-Em um novo terminal, inicie o tráfego limpo (1 pacote/segundo):
-python trafic-sim/traffic-sim.py
-
-3. Injetar o Ataque DoS (O Hacker)
-Em um terceiro terminal, dispare o script malicioso para sobrecarregar a rede virtual:
-python trafic-sim/ataque-dos.py
-
+1. **Subir o ambiente completo (Build + Execução):**
+```
+Bash
+docker compose up --build
+```
+2. **Acompanhar os logs de detecção em tempo real (em outro terminal, caso rode com -d):**
+```
+Bash
+docker compose logs -f
+```
+3. **Encerrar a simulação e remover os containers:**
+```
+Bash
+docker compose down
+```
