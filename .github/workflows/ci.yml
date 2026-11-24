@@ -56,11 +56,10 @@ jobs:
           VERSION="v1.0.${{ github.run_number }}"
           echo "Construindo imagens Docker para a release $VERSION..."
           docker compose build
-          # Tagueamento semântico para controle de versão e backup de rollback
           IMAGE_ID=$(docker images -q | head -n 1)
           if [ -n "$IMAGE_ID" ]; then
-            docker tag $IMAGE_ID ghcr.io/${{ github.repository_owner }}/sistem_ids:$VERSION
-            docker tag $IMAGE_ID ghcr.io/${{ github.repository_owner }}/sistem_ids:v1.0.0-stable
+            docker tag $IMAGE_ID ghcr.io/marciotdsjr/sistem_ids:$VERSION
+            docker tag $IMAGE_ID ghcr.io/marciotdsjr/sistem_ids:v1.0.0-stable
             echo "Imagens tagueadas com sucesso: $VERSION e v1.0.0-stable"
           fi
 
@@ -78,7 +77,7 @@ jobs:
           echo "🚨 ERRO CRÍTICO: Falha detectada na versão v1.0.${{ github.run_number }}!"
           echo "🔄 Executando Rollback para a última versão estável (v1.0.0-stable)..."
           docker compose down
-          IMAGE_STABLE="ghcr.io/${{ github.repository_owner }}/sistem_ids:v1.0.0-stable"
+          IMAGE_STABLE="ghcr.io/marciotdsjr/sistem_ids:v1.0.0-stable"
           echo "Revertendo containers para a imagem: $IMAGE_STABLE"
           docker compose up -d
           echo "✅ Rollback finalizado com sucesso!"
